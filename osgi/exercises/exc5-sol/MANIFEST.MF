@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Tool: Bnd-0.0.384
+Bundle-Name: yellowcircle
+Created-By: 1.6.0_27 (Sun Microsystems Inc.)
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,JavaSE-1.6
+Bundle-Version: 3.0
+Extension-Class: org.foo.shape.yellowcircle.YellowCircle
+Bnd-LastModified: 1318170150234
+Extension-Icon: org/foo/shape/yellowcircle/yellowcircle.png
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0
+Bundle-DocURL: http://code.google.com/p/osgi-in-action/
+Import-Package: org.foo.shape;version="[3.0,4.0)"
+Bundle-SymbolicName: org.foo.shape.yellowcircle
+Extension-Name: YellowCircle
+
