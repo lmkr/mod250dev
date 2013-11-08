@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Activator.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.line-number {background-color: #e9e8e2}
+.keyword-directive {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\mod250\osgi\osgi-in-action\chapter04\paint-example\org.foo.paint\src\org\foo\paint\Activator.java</td></tr></table>
+<pre>
+<span class="line-number">  1</span> <span class="comment">/*</span>
+<span class="line-number">  2</span> <span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="line-number">  3</span> <span class="comment"> * or more contributor license agreements.  See the NOTICE file</span>
+<span class="line-number">  4</span> <span class="comment"> * distributed with this work for additional information</span>
+<span class="line-number">  5</span> <span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span>
+<span class="line-number">  6</span> <span class="comment"> * to you under the Apache License, Version 2.0 (the</span>
+<span class="line-number">  7</span> <span class="comment"> * &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="line-number">  8</span> <span class="comment"> * with the License.  You may obtain a copy of the License at</span>
+<span class="line-number">  9</span> <span class="comment"> *</span>
+<span class="line-number"> 10</span> <span class="comment"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="line-number"> 11</span> <span class="comment"> *</span>
+<span class="line-number"> 12</span> <span class="comment"> * Unless required by applicable law or agreed to in writing,</span>
+<span class="line-number"> 13</span> <span class="comment"> * software distributed under the License is distributed on an</span>
+<span class="line-number"> 14</span> <span class="comment"> * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="line-number"> 15</span> <span class="comment"> * KIND, either express or implied.  See the License for the</span>
+<span class="line-number"> 16</span> <span class="comment"> * specific language governing permissions and limitations</span>
+<span class="line-number"> 17</span> <span class="comment"> * under the License.</span>
+<span class="line-number"> 18</span> <span class="comment"> */</span>
+<span class="line-number"> 19</span> <span class="keyword-directive">package</span> org.foo.paint;
+<span class="line-number"> 20</span> 
+<span class="line-number"> 21</span> <span class="keyword-directive">import</span> java.awt.event.WindowAdapter;
+<span class="line-number"> 22</span> <span class="keyword-directive">import</span> java.awt.event.WindowEvent;
+<span class="line-number"> 23</span> <span class="keyword-directive">import</span> javax.swing.JFrame;
+<span class="line-number"> 24</span> <span class="keyword-directive">import</span> javax.swing.SwingUtilities;
+<span class="line-number"> 25</span> <span class="keyword-directive">import</span> org.osgi.framework.*;
+<span class="line-number"> 26</span> 
+<span class="line-number"> 27</span> <span class="comment">/**</span>
+<span class="line-number"> 28</span> <span class="comment"> * </span><span class="comment">The</span> <span class="comment">activator</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">host</span> <span class="comment">application</span> <span class="comment">bundle</span><span class="comment">.</span> <span class="comment">The</span> <span class="comment">activator</span> <span class="comment">creates</span> <span class="comment">the</span> <span class="comment">main</span>
+<span class="line-number"> 29</span> <span class="comment"> * </span><span class="comment">application</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">JFrame</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">and</span> <span class="comment">starts</span> <span class="comment">tracking</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="ST0">&lt;/tt&gt;</span>
+<span class="line-number"> 30</span> <span class="comment"> * </span><span class="comment">services</span><span class="comment">.</span> <span class="comment">All</span> <span class="comment">activity</span> <span class="comment">is</span> <span class="comment">performed</span> <span class="comment">on</span> <span class="comment">the</span> <span class="comment">Swing</span> <span class="comment">event</span> <span class="comment">thread</span> <span class="comment">to</span> <span class="comment">avoid</span>
+<span class="line-number"> 31</span> <span class="comment"> * </span><span class="comment">synchronization</span> <span class="comment">and</span> <span class="comment">repainting</span> <span class="comment">issues</span><span class="comment">.</span> <span class="comment">Closing</span> <span class="comment">the</span> <span class="comment">application</span> <span class="comment">window</span> <span class="comment">will</span>
+<span class="line-number"> 32</span> <span class="comment"> * </span><span class="comment">result</span> <span class="comment">in</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">Bundle</span><span class="comment">.</span><span class="comment">stop</span><span class="comment">()</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">being</span> <span class="comment">called</span> <span class="comment">on</span> <span class="comment">the</span> <span class="comment">system</span> <span class="comment">bundle</span><span class="comment">, </span><span class="comment">which</span>
+<span class="line-number"> 33</span> <span class="comment"> * </span><span class="comment">will</span> <span class="comment">cause</span> <span class="comment">the</span> <span class="comment">framework</span> <span class="comment">to</span> <span class="comment">shutdown</span> <span class="comment">and</span> <span class="comment">the</span> <span class="comment">JVM</span> <span class="comment">to</span> <span class="comment">exit</span><span class="comment">.</span>
+<span class="line-number"> 34</span> <span class="comment"> *</span><span class="comment">*/</span>
+<span class="line-number"> 35</span> <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> Activator <span class="keyword-directive">implements</span> BundleActivator, Runnable {
+<span class="line-number"> 36</span>   <span class="keyword-directive">private</span> BundleContext m_context = <span class="keyword-directive">null</span>;
+<span class="line-number"> 37</span>   <span class="keyword-directive">private</span> PaintFrame m_frame = <span class="keyword-directive">null</span>;
+<span class="line-number"> 38</span>   <span class="keyword-directive">private</span> ShapeTracker m_shapetracker = <span class="keyword-directive">null</span>;
+<span class="line-number"> 39</span> 
+<span class="line-number"> 40</span>   <span class="comment">/**</span>
+<span class="line-number"> 41</span> <span class="comment">   * </span><span class="comment">Displays</span> <span class="comment">the</span> <span class="comment">applications</span> <span class="comment">window</span> <span class="comment">and</span> <span class="comment">starts</span> <span class="comment">service</span> <span class="comment">tracking</span><span class="comment">; </span><span class="comment">everything</span> <span class="comment">is</span>
+<span class="line-number"> 42</span> <span class="comment">   * </span><span class="comment">done</span> <span class="comment">on</span> <span class="comment">the</span> <span class="comment">Swing</span> <span class="comment">event</span> <span class="comment">thread</span> <span class="comment">to</span> <span class="comment">avoid</span> <span class="comment">synchronization</span> <span class="comment">and</span> <span class="comment">repainting</span>
+<span class="line-number"> 43</span> <span class="comment">   * </span><span class="comment">issues</span><span class="comment">.</span>
+<span class="line-number"> 44</span> <span class="comment">   * </span>
+<span class="line-number"> 45</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">context</span> <span class="comment">The</span> <span class="comment">context</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number"> 46</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 47</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> start(BundleContext context) {
+<span class="line-number"> 48</span>     m_context = context;
+<span class="line-number"> 49</span>     <span class="keyword-directive">if</span> (SwingUtilities.isEventDispatchThread()) {
+<span class="line-number"> 50</span>       run();
+<span class="line-number"> 51</span>     } <span class="keyword-directive">else</span> {
+<span class="line-number"> 52</span>       <span class="keyword-directive">try</span> {
+<span class="line-number"> 53</span>         javax.swing.SwingUtilities.invokeAndWait(<span class="keyword-directive">this</span>);
+<span class="line-number"> 54</span>       } <span class="keyword-directive">catch</span> (Exception ex) {
+<span class="line-number"> 55</span>         ex.printStackTrace();
+<span class="line-number"> 56</span>       }
+<span class="line-number"> 57</span>     }
+<span class="line-number"> 58</span>   }
+<span class="line-number"> 59</span> 
+<span class="line-number"> 60</span>   <span class="comment">/**</span>
+<span class="line-number"> 61</span> <span class="comment">   * </span><span class="comment">Stops</span> <span class="comment">service</span> <span class="comment">tracking</span> <span class="comment">and</span> <span class="comment">disposes</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">application</span> <span class="comment">window</span><span class="comment">.</span>
+<span class="line-number"> 62</span> <span class="comment">   * </span>
+<span class="line-number"> 63</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">context</span> <span class="comment">The</span> <span class="comment">context</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number"> 64</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 65</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> stop(BundleContext context) {
+<span class="line-number"> 66</span>     m_shapetracker.close();
+<span class="line-number"> 67</span>     <span class="keyword-directive">final</span> PaintFrame frame = m_frame;
+<span class="line-number"> 68</span>     javax.swing.SwingUtilities.invokeLater(<span class="keyword-directive">new</span> Runnable() {
+<span class="line-number"> 69</span>       <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> run() {
+<span class="line-number"> 70</span>         frame.setVisible(<span class="keyword-directive">false</span>);
+<span class="line-number"> 71</span>         frame.dispose();
+<span class="line-number"> 72</span>       }
+<span class="line-number"> 73</span>     });
+<span class="line-number"> 74</span>   }
+<span class="line-number"> 75</span> 
+<span class="line-number"> 76</span>   <span class="comment">/**</span>
+<span class="line-number"> 77</span> <span class="comment">   * </span><span class="comment">This</span> <span class="comment">method</span> <span class="comment">actually</span> <span class="comment">performs</span> <span class="comment">the</span> <span class="comment">creation</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">application</span> <span class="comment">window</span><span class="comment">.</span> <span class="comment">It</span> <span class="comment">is</span>
+<span class="line-number"> 78</span> <span class="comment">   * </span><span class="comment">intended</span> <span class="comment">to</span> <span class="comment">be</span> <span class="comment">called</span> <span class="comment">by</span> <span class="comment">the</span> <span class="comment">Swing</span> <span class="comment">event</span> <span class="comment">thread</span> <span class="comment">and</span> <span class="comment">should</span> <span class="comment">not</span> <span class="comment">be</span> <span class="comment">called</span>
+<span class="line-number"> 79</span> <span class="comment">   * </span><span class="comment">directly</span><span class="comment">.</span>
+<span class="line-number"> 80</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 81</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> run() {
+<span class="line-number"> 82</span>     m_frame = <span class="keyword-directive">new</span> PaintFrame();
+<span class="line-number"> 83</span> 
+<span class="line-number"> 84</span>     m_frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+<span class="line-number"> 85</span>     m_frame.addWindowListener(<span class="keyword-directive">new</span> WindowAdapter() {
+<span class="line-number"> 86</span>       <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> windowClosing(WindowEvent evt) {
+<span class="line-number"> 87</span>         <span class="keyword-directive">try</span> {
+<span class="line-number"> 88</span>           m_context.getBundle(0).stop();
+<span class="line-number"> 89</span>         } <span class="keyword-directive">catch</span> (BundleException ex) {
+<span class="line-number"> 90</span>           ex.printStackTrace();
+<span class="line-number"> 91</span>         }
+<span class="line-number"> 92</span>       }
+<span class="line-number"> 93</span>     });
+<span class="line-number"> 94</span> 
+<span class="line-number"> 95</span>     m_frame.setVisible(<span class="keyword-directive">true</span>);
+<span class="line-number"> 96</span> 
+<span class="line-number"> 97</span>     m_shapetracker = <span class="keyword-directive">new</span> ShapeTracker(m_context, m_frame);
+<span class="line-number"> 98</span>     m_shapetracker.open();
+<span class="line-number"> 99</span>   }
+<span class="line-number">100</span> }
+<span class="line-number">101</span> 
+<span class="line-number">102</span> 
+</pre></body>
+</html>

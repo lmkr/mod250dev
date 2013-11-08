@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Circle.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.line-number {background-color: #e9e8e2}
+.keyword-directive {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\mod250\osgi\osgi-in-action\chapter04\paint-example\org.foo.shape.circle\src\org\foo\shape\circle\Circle.java</td></tr></table>
+<pre>
+<span class="line-number"> 1</span> <span class="comment">/*</span>
+<span class="line-number"> 2</span> <span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="line-number"> 3</span> <span class="comment"> * or more contributor license agreements.  See the NOTICE file</span>
+<span class="line-number"> 4</span> <span class="comment"> * distributed with this work for additional information</span>
+<span class="line-number"> 5</span> <span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span>
+<span class="line-number"> 6</span> <span class="comment"> * to you under the Apache License, Version 2.0 (the</span>
+<span class="line-number"> 7</span> <span class="comment"> * &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="line-number"> 8</span> <span class="comment"> * with the License.  You may obtain a copy of the License at</span>
+<span class="line-number"> 9</span> <span class="comment"> *</span>
+<span class="line-number">10</span> <span class="comment"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="line-number">11</span> <span class="comment"> *</span>
+<span class="line-number">12</span> <span class="comment"> * Unless required by applicable law or agreed to in writing,</span>
+<span class="line-number">13</span> <span class="comment"> * software distributed under the License is distributed on an</span>
+<span class="line-number">14</span> <span class="comment"> * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="line-number">15</span> <span class="comment"> * KIND, either express or implied.  See the License for the</span>
+<span class="line-number">16</span> <span class="comment"> * specific language governing permissions and limitations</span>
+<span class="line-number">17</span> <span class="comment"> * under the License.</span>
+<span class="line-number">18</span> <span class="comment"> */</span>
+<span class="line-number">19</span> <span class="keyword-directive">package</span> org.foo.shape.circle;
+<span class="line-number">20</span> 
+<span class="line-number">21</span> <span class="keyword-directive">import</span> java.awt.*;
+<span class="line-number">22</span> <span class="keyword-directive">import</span> java.awt.geom.Ellipse2D;
+<span class="line-number">23</span> <span class="keyword-directive">import</span> org.foo.shape.SimpleShape;
+<span class="line-number">24</span> 
+<span class="line-number">25</span> <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> Circle <span class="keyword-directive">implements</span> SimpleShape {
+<span class="line-number">26</span> 
+<span class="line-number">27</span>   <span class="comment">/**</span>
+<span class="line-number">28</span> <span class="comment">   * </span><span class="comment">Implements</span> <span class="comment">the</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="comment">.</span><span class="comment">draw</span><span class="comment">()</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">method</span> <span class="comment">for</span> <span class="comment">painting</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number">29</span> <span class="comment">   * </span>
+<span class="line-number">30</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">g2</span> <span class="comment">The</span> <span class="comment">graphics</span> <span class="comment">object</span> <span class="comment">used</span> <span class="comment">for</span> <span class="comment">painting</span><span class="comment">.</span>
+<span class="line-number">31</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">p</span> <span class="comment">The</span> <span class="comment">position</span> <span class="comment">to</span> <span class="comment">paint</span> <span class="comment">the</span> <span class="comment">triangle</span><span class="comment">.</span>
+<span class="line-number">32</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">33</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> draw(Graphics2D g2, Point p) {
+<span class="line-number">34</span>     <span class="keyword-directive">int</span> x = p.x - 25;
+<span class="line-number">35</span>     <span class="keyword-directive">int</span> y = p.y - 25;
+<span class="line-number">36</span>     GradientPaint gradient = <span class="keyword-directive">new</span> GradientPaint(x, y, Color.RED, x + 50, y, Color.WHITE);
+<span class="line-number">37</span>     g2.setPaint(gradient);
+<span class="line-number">38</span>     g2.fill(<span class="keyword-directive">new</span> Ellipse2D.Double(x, y, 50, 50));
+<span class="line-number">39</span>     BasicStroke wideStroke = <span class="keyword-directive">new</span> BasicStroke(2.0f);
+<span class="line-number">40</span>     g2.setColor(Color.black);
+<span class="line-number">41</span>     g2.setStroke(wideStroke);
+<span class="line-number">42</span>     g2.draw(<span class="keyword-directive">new</span> Ellipse2D.Double(x, y, 50, 50));
+<span class="line-number">43</span>   }
+<span class="line-number">44</span> }
+<span class="line-number">45</span> 
+<span class="line-number">46</span> 
+</pre></body>
+</html>

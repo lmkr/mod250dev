@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Activator.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.line-number {background-color: #e9e8e2}
+.character {color: #ce7b00}
+.keyword-directive {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\mod250\osgi\osgi-in-action\chapter04\paint-example\org.foo.shape.circle\src\org\foo\shape\circle\Activator.java</td></tr></table>
+<pre>
+<span class="line-number"> 1</span> <span class="comment">/*</span>
+<span class="line-number"> 2</span> <span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="line-number"> 3</span> <span class="comment"> * or more contributor license agreements.  See the NOTICE file</span>
+<span class="line-number"> 4</span> <span class="comment"> * distributed with this work for additional information</span>
+<span class="line-number"> 5</span> <span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span>
+<span class="line-number"> 6</span> <span class="comment"> * to you under the Apache License, Version 2.0 (the</span>
+<span class="line-number"> 7</span> <span class="comment"> * &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="line-number"> 8</span> <span class="comment"> * with the License.  You may obtain a copy of the License at</span>
+<span class="line-number"> 9</span> <span class="comment"> *</span>
+<span class="line-number">10</span> <span class="comment"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="line-number">11</span> <span class="comment"> *</span>
+<span class="line-number">12</span> <span class="comment"> * Unless required by applicable law or agreed to in writing,</span>
+<span class="line-number">13</span> <span class="comment"> * software distributed under the License is distributed on an</span>
+<span class="line-number">14</span> <span class="comment"> * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="line-number">15</span> <span class="comment"> * KIND, either express or implied.  See the License for the</span>
+<span class="line-number">16</span> <span class="comment"> * specific language governing permissions and limitations</span>
+<span class="line-number">17</span> <span class="comment"> * under the License.</span>
+<span class="line-number">18</span> <span class="comment"> */</span>
+<span class="line-number">19</span> <span class="keyword-directive">package</span> org.foo.shape.circle;
+<span class="line-number">20</span> 
+<span class="line-number">21</span> <span class="keyword-directive">import</span> java.util.Hashtable;
+<span class="line-number">22</span> <span class="keyword-directive">import</span> javax.swing.ImageIcon;
+<span class="line-number">23</span> <span class="keyword-directive">import</span> org.foo.shape.SimpleShape;
+<span class="line-number">24</span> <span class="keyword-directive">import</span> org.osgi.framework.BundleActivator;
+<span class="line-number">25</span> <span class="keyword-directive">import</span> org.osgi.framework.BundleContext;
+<span class="line-number">26</span> 
+<span class="line-number">27</span> <span class="comment">/**</span>
+<span class="line-number">28</span> <span class="comment"> * </span><span class="comment">This</span> <span class="comment">class</span> <span class="comment">implements</span> <span class="comment">a</span> <span class="comment">simple</span> <span class="comment">bundle</span> <span class="comment">activator</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">circle</span>
+<span class="line-number">29</span> <span class="comment"> * </span><span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">service</span><span class="comment">.</span> <span class="comment">This</span> <span class="comment">activator</span> <span class="comment">simply</span> <span class="comment">creates</span> <span class="comment">an</span> <span class="comment">instance</span> <span class="comment">of</span>
+<span class="line-number">30</span> <span class="comment"> * </span><span class="comment">the</span> <span class="comment">circle</span> <span class="comment">service</span> <span class="comment">object</span> <span class="comment">and</span> <span class="comment">registers</span> <span class="comment">it</span> <span class="comment">with</span> <span class="comment">the</span> <span class="comment">service</span> <span class="comment">registry</span> <span class="comment">along</span>
+<span class="line-number">31</span> <span class="comment"> * </span><span class="comment">with</span> <span class="comment">the</span> <span class="comment">service</span> <span class="comment">properties</span> <span class="comment">indicating</span> <span class="comment">the</span> <span class="comment">service</span><span class="comment">&#39;</span><span class="comment">s</span> <span class="comment">name</span> <span class="comment">and</span> <span class="comment">icon</span><span class="comment">.</span>
+<span class="line-number">32</span> <span class="comment"> *</span><span class="comment">*/</span>
+<span class="line-number">33</span> <span class="keyword-directive">public</span> <span class="keyword-directive">class</span> Activator <span class="keyword-directive">implements</span> BundleActivator {
+<span class="line-number">34</span>   <span class="keyword-directive">private</span> BundleContext m_context = <span class="keyword-directive">null</span>;
+<span class="line-number">35</span> 
+<span class="line-number">36</span>   <span class="comment">/**</span>
+<span class="line-number">37</span> <span class="comment">   * </span><span class="comment">Implements</span> <span class="comment">the</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">BundleActivator</span><span class="comment">.</span><span class="comment">start</span><span class="comment">()</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">method</span><span class="comment">, </span><span class="comment">which</span> <span class="comment">registers</span> <span class="comment">the</span>
+<span class="line-number">38</span> <span class="comment">   * </span><span class="comment">circle</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">service</span><span class="comment">.</span>
+<span class="line-number">39</span> <span class="comment">   * </span>
+<span class="line-number">40</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">context</span> <span class="comment">The</span> <span class="comment">context</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number">41</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">42</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> start(BundleContext context) {
+<span class="line-number">43</span>     m_context = context;
+<span class="line-number">44</span>     Hashtable dict = <span class="keyword-directive">new</span> Hashtable();
+<span class="line-number">45</span>     dict.put(SimpleShape.NAME_PROPERTY, <span class="character">&quot;</span><span class="character">Circle</span><span class="character">&quot;</span>);
+<span class="line-number">46</span>     dict.put(SimpleShape.ICON_PROPERTY, <span class="keyword-directive">new</span> ImageIcon(<span class="keyword-directive">this</span>.getClass().getResource(<span class="character">&quot;</span><span class="character">circle.png</span><span class="character">&quot;</span>)));
+<span class="line-number">47</span>     m_context.registerService(SimpleShape.<span class="keyword-directive">class</span>.getName(), <span class="keyword-directive">new</span> Circle(), dict);
+<span class="line-number">48</span>   }
+<span class="line-number">49</span> 
+<span class="line-number">50</span>   <span class="comment">/**</span>
+<span class="line-number">51</span> <span class="comment">   * </span><span class="comment">Implements</span> <span class="comment">the</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">BundleActivator</span><span class="comment">.</span><span class="comment">start</span><span class="comment">()</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">method</span><span class="comment">, </span><span class="comment">which</span> <span class="comment">does</span> <span class="comment">nothing</span><span class="comment">.</span>
+<span class="line-number">52</span> <span class="comment">   * </span>
+<span class="line-number">53</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">context</span> <span class="comment">The</span> <span class="comment">context</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number">54</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">55</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> stop(BundleContext context) {}
+<span class="line-number">56</span> }
+<span class="line-number">57</span> 
+<span class="line-number">58</span> 
+</pre></body>
+</html>

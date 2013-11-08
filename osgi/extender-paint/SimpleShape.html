@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>SimpleShape.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.line-number {background-color: #e9e8e2}
+.character {color: #ce7b00}
+.keyword-directive {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\mod250\osgi-in-action\chapter03\paint-example\org.foo.shape\src\org\foo\shape\SimpleShape.java</td></tr></table>
+<pre>
+<span class="line-number"> 1</span> <span class="comment">/*</span>
+<span class="line-number"> 2</span> <span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="line-number"> 3</span> <span class="comment"> * or more contributor license agreements.  See the NOTICE file</span>
+<span class="line-number"> 4</span> <span class="comment"> * distributed with this work for additional information</span>
+<span class="line-number"> 5</span> <span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span>
+<span class="line-number"> 6</span> <span class="comment"> * to you under the Apache License, Version 2.0 (the</span>
+<span class="line-number"> 7</span> <span class="comment"> * &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="line-number"> 8</span> <span class="comment"> * with the License.  You may obtain a copy of the License at</span>
+<span class="line-number"> 9</span> <span class="comment"> *</span>
+<span class="line-number">10</span> <span class="comment"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="line-number">11</span> <span class="comment"> *</span>
+<span class="line-number">12</span> <span class="comment"> * Unless required by applicable law or agreed to in writing,</span>
+<span class="line-number">13</span> <span class="comment"> * software distributed under the License is distributed on an</span>
+<span class="line-number">14</span> <span class="comment"> * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="line-number">15</span> <span class="comment"> * KIND, either express or implied.  See the License for the</span>
+<span class="line-number">16</span> <span class="comment"> * specific language governing permissions and limitations</span>
+<span class="line-number">17</span> <span class="comment"> * under the License.</span>
+<span class="line-number">18</span> <span class="comment"> */</span>
+<span class="line-number">19</span> <span class="keyword-directive">package</span> org.foo.shape;
+<span class="line-number">20</span> 
+<span class="line-number">21</span> <span class="keyword-directive">import</span> java.awt.Graphics2D;
+<span class="line-number">22</span> <span class="keyword-directive">import</span> java.awt.Point;
+<span class="line-number">23</span> 
+<span class="line-number">24</span> <span class="comment">/**</span>
+<span class="line-number">25</span> <span class="comment"> * </span><span class="comment">This</span> <span class="comment">interface</span> <span class="comment">defines</span> <span class="comment">the</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">extension</span><span class="comment">.</span> <span class="comment">This</span> <span class="comment">extension</span> <span class="comment">is</span>
+<span class="line-number">26</span> <span class="comment"> * </span><span class="comment">used</span> <span class="comment">to</span> <span class="comment">draw</span> <span class="comment">shapes</span><span class="comment">.</span> <span class="comment">It</span> <span class="comment">is</span> <span class="comment">defined</span> <span class="comment">by</span> <span class="comment">three</span> <span class="comment">manifest</span> <span class="comment">properties</span><span class="comment">:</span>
+<span class="line-number">27</span> <span class="comment"> * </span><span class="ST0">&lt;ul&gt;</span>
+<span class="line-number">28</span> <span class="comment"> * </span><span class="ST0">&lt;li&gt;</span><span class="comment">Extension</span><span class="comment">-</span><span class="comment">Name</span><span class="comment"> - </span><span class="comment">A</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">String</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">name</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span><span class="ST0">&lt;/li&gt;</span>
+<span class="line-number">29</span> <span class="comment"> * </span><span class="ST0">&lt;li&gt;</span><span class="comment">Extension</span><span class="comment">-</span><span class="comment">Icon</span><span class="comment"> - </span><span class="comment">An</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">Icon</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">resource</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span><span class="ST0">&lt;/li&gt;</span>
+<span class="line-number">30</span> <span class="comment"> * </span><span class="ST0">&lt;li&gt;</span><span class="comment">Extension</span><span class="comment">-</span><span class="comment">Class</span><span class="comment"> - </span><span class="comment">A</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">Class</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">that</span> <span class="comment">implements</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span><span class="ST0">&lt;/li&gt;</span>
+<span class="line-number">31</span> <span class="comment"> * </span><span class="ST0">&lt;/ul&gt;</span>
+<span class="line-number">32</span> <span class="comment"> *</span><span class="comment">*/</span>
+<span class="line-number">33</span> <span class="keyword-directive">public</span> <span class="keyword-directive">interface</span> SimpleShape {
+<span class="line-number">34</span> 
+<span class="line-number">35</span>   <span class="comment">/**</span>
+<span class="line-number">36</span> <span class="comment">   * </span><span class="comment">A</span> <span class="comment">property</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">name</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number">37</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">38</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">static</span> <span class="keyword-directive">final</span> String NAME_PROPERTY = <span class="character">&quot;</span><span class="character">Extension-Name</span><span class="character">&quot;</span>;
+<span class="line-number">39</span> 
+<span class="line-number">40</span>   <span class="comment">/**</span>
+<span class="line-number">41</span> <span class="comment">   * </span><span class="comment">A</span> <span class="comment">property</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">icon</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number">42</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">43</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">static</span> <span class="keyword-directive">final</span> String ICON_PROPERTY = <span class="character">&quot;</span><span class="character">Extension-Icon</span><span class="character">&quot;</span>;
+<span class="line-number">44</span> 
+<span class="line-number">45</span>   <span class="comment">/**</span>
+<span class="line-number">46</span> <span class="comment">   * </span><span class="comment">A</span> <span class="comment">property</span> <span class="comment">for</span> <span class="comment">the</span> <span class="comment">class</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number">47</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">48</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">static</span> <span class="keyword-directive">final</span> String CLASS_PROPERTY = <span class="character">&quot;</span><span class="character">Extension-Class</span><span class="character">&quot;</span>;
+<span class="line-number">49</span> 
+<span class="line-number">50</span>   <span class="comment">/**</span>
+<span class="line-number">51</span> <span class="comment">   * </span><span class="comment">Draw</span> <span class="comment">this</span> <span class="comment">shape</span> <span class="comment">at</span> <span class="comment">the</span> <span class="comment">given</span> <span class="comment">position</span><span class="comment">.</span>
+<span class="line-number">52</span> <span class="comment">   * </span>
+<span class="line-number">53</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">g2</span> <span class="comment">The</span> <span class="comment">graphics</span> <span class="comment">object</span> <span class="comment">used</span> <span class="comment">for</span> <span class="comment">painting</span><span class="comment">.</span>
+<span class="line-number">54</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">p</span> <span class="comment">The</span> <span class="comment">position</span> <span class="comment">to</span> <span class="comment">paint</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number">55</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number">56</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> draw(Graphics2D g2, Point p);
+<span class="line-number">57</span> }
+<span class="line-number">58</span> 
+<span class="line-number">59</span> 
+</pre></body>
+</html>

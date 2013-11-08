@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>DefaultShape.java</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style type="text/css">
+<!--
+body {color: #000000; background-color: #ffffff; font-family: Monospaced}
+pre {color: #000000; background-color: #ffffff; font-family: Monospaced}
+table {color: #000000; background-color: #e9e8e2; font-family: Monospaced}
+.ST0 {color: #969696; font-family: Monospaced; font-weight: bold}
+.comment {color: #969696}
+.line-number {background-color: #e9e8e2}
+.character {color: #ce7b00}
+.keyword-directive {color: #0000e6}
+-->
+</style>
+</head>
+<body>
+<table width="100%"><tr><td align="center">C:\mod250\osgi-in-action\chapter03\paint-example\org.foo.paint\src\org\foo\paint\DefaultShape.java</td></tr></table>
+<pre>
+<span class="line-number">  1</span> <span class="comment">/*</span>
+<span class="line-number">  2</span> <span class="comment"> * Licensed to the Apache Software Foundation (ASF) under one</span>
+<span class="line-number">  3</span> <span class="comment"> * or more contributor license agreements.  See the NOTICE file</span>
+<span class="line-number">  4</span> <span class="comment"> * distributed with this work for additional information</span>
+<span class="line-number">  5</span> <span class="comment"> * regarding copyright ownership.  The ASF licenses this file</span>
+<span class="line-number">  6</span> <span class="comment"> * to you under the Apache License, Version 2.0 (the</span>
+<span class="line-number">  7</span> <span class="comment"> * &quot;License&quot;); you may not use this file except in compliance</span>
+<span class="line-number">  8</span> <span class="comment"> * with the License.  You may obtain a copy of the License at</span>
+<span class="line-number">  9</span> <span class="comment"> *</span>
+<span class="line-number"> 10</span> <span class="comment"> *   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="line-number"> 11</span> <span class="comment"> *</span>
+<span class="line-number"> 12</span> <span class="comment"> * Unless required by applicable law or agreed to in writing,</span>
+<span class="line-number"> 13</span> <span class="comment"> * software distributed under the License is distributed on an</span>
+<span class="line-number"> 14</span> <span class="comment"> * &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY</span>
+<span class="line-number"> 15</span> <span class="comment"> * KIND, either express or implied.  See the License for the</span>
+<span class="line-number"> 16</span> <span class="comment"> * specific language governing permissions and limitations</span>
+<span class="line-number"> 17</span> <span class="comment"> * under the License.</span>
+<span class="line-number"> 18</span> <span class="comment"> */</span>
+<span class="line-number"> 19</span> <span class="keyword-directive">package</span> org.foo.paint;
+<span class="line-number"> 20</span> 
+<span class="line-number"> 21</span> <span class="keyword-directive">import</span> java.awt.*;
+<span class="line-number"> 22</span> <span class="keyword-directive">import</span> javax.swing.ImageIcon;
+<span class="line-number"> 23</span> <span class="keyword-directive">import</span> org.foo.shape.SimpleShape;
+<span class="line-number"> 24</span> <span class="keyword-directive">import</span> org.osgi.framework.Bundle;
+<span class="line-number"> 25</span> <span class="keyword-directive">import</span> org.osgi.framework.BundleContext;
+<span class="line-number"> 26</span> 
+<span class="line-number"> 27</span> <span class="comment">/**</span>
+<span class="line-number"> 28</span> <span class="comment"> * </span><span class="comment">This</span> <span class="comment">class</span> <span class="comment">is</span> <span class="comment">used</span> <span class="comment">as</span> <span class="comment">a</span> <span class="comment">proxy</span> <span class="comment">to</span> <span class="comment">defer</span> <span class="comment">object</span> <span class="comment">creation</span> <span class="comment">from</span> <span class="comment">shape</span> <span class="comment">provider</span>
+<span class="line-number"> 29</span> <span class="comment"> * </span><span class="comment">bundles</span> <span class="comment">and</span> <span class="comment">also</span> <span class="comment">as</span> <span class="comment">a</span> <span class="comment">placeholder</span> <span class="comment">shape</span> <span class="comment">when</span> <span class="comment">previously</span> <span class="comment">used</span> <span class="comment">shapes</span> <span class="comment">are</span> <span class="comment">no</span>
+<span class="line-number"> 30</span> <span class="comment"> * </span><span class="comment">longer</span> <span class="comment">available</span><span class="comment">.</span> <span class="comment">These</span> <span class="comment">two</span> <span class="comment">purposes</span> <span class="comment">are</span> <span class="comment">actually</span> <span class="comment">orthogonal</span><span class="comment">, </span><span class="comment">but</span> <span class="comment">were</span>
+<span class="line-number"> 31</span> <span class="comment"> * </span><span class="comment">combined</span> <span class="comment">into</span> <span class="comment">a</span> <span class="comment">single</span> <span class="comment">class</span> <span class="comment">to</span> <span class="comment">reduce</span> <span class="comment">the</span> <span class="comment">number</span> <span class="comment">of</span> <span class="comment">classes</span> <span class="comment">in</span> <span class="comment">the</span>
+<span class="line-number"> 32</span> <span class="comment"> * </span><span class="comment">application</span><span class="comment">.</span> <span class="comment">The</span> <span class="comment">proxy</span><span class="comment">-</span><span class="comment">related</span> <span class="comment">functionality</span> <span class="comment">is</span> <span class="comment">introduced</span> <span class="comment">as</span> <span class="comment">a</span> <span class="comment">way</span> <span class="comment">to</span> <span class="comment">lazily</span>
+<span class="line-number"> 33</span> <span class="comment"> * </span><span class="comment">create</span> <span class="comment">shape</span> <span class="comment">objects</span> <span class="comment">in</span> <span class="comment">an</span> <span class="comment">effort</span> <span class="comment">to</span> <span class="comment">improve</span> <span class="comment">performance</span><span class="comment">; </span><span class="comment">this</span> <span class="comment">level</span> <span class="comment">of</span>
+<span class="line-number"> 34</span> <span class="comment"> * </span><span class="comment">indirection</span> <span class="comment">could</span> <span class="comment">be</span> <span class="comment">removed</span> <span class="comment">if</span> <span class="comment">eager</span> <span class="comment">creation</span> <span class="comment">of</span> <span class="comment">objects</span> <span class="comment">is</span> <span class="comment">not</span> <span class="comment">a</span> <span class="comment">concern</span><span class="comment">.</span>
+<span class="line-number"> 35</span> <span class="comment"> *</span><span class="comment">*/</span>
+<span class="line-number"> 36</span> <span class="keyword-directive">class</span> DefaultShape <span class="keyword-directive">implements</span> SimpleShape {
+<span class="line-number"> 37</span>   <span class="keyword-directive">private</span> SimpleShape m_shape;
+<span class="line-number"> 38</span>   <span class="keyword-directive">private</span> ImageIcon m_icon;
+<span class="line-number"> 39</span>   <span class="keyword-directive">private</span> BundleContext m_context;
+<span class="line-number"> 40</span>   <span class="keyword-directive">private</span> <span class="keyword-directive">long</span> m_bundleId;
+<span class="line-number"> 41</span>   <span class="keyword-directive">private</span> String m_className;
+<span class="line-number"> 42</span> 
+<span class="line-number"> 43</span>   <span class="comment">/**</span>
+<span class="line-number"> 44</span> <span class="comment">   * </span><span class="comment">This</span> <span class="comment">constructs</span> <span class="comment">a</span> <span class="comment">placeholder</span> <span class="comment">shape</span> <span class="comment">that</span> <span class="comment">draws</span> <span class="comment">a</span> <span class="comment">default</span> <span class="comment">icon</span><span class="comment">.</span> <span class="comment">It</span> <span class="comment">is</span> <span class="comment">used</span>
+<span class="line-number"> 45</span> <span class="comment">   * </span><span class="comment">when</span> <span class="comment">a</span> <span class="comment">previously</span> <span class="comment">drawn</span> <span class="comment">shape</span> <span class="comment">is</span> <span class="comment">no</span> <span class="comment">longer</span> <span class="comment">available</span><span class="comment">.</span>
+<span class="line-number"> 46</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 47</span>   <span class="keyword-directive">public</span> DefaultShape() {
+<span class="line-number"> 48</span>   <span class="comment">// Do nothing.</span>
+<span class="line-number"> 49</span>   }
+<span class="line-number"> 50</span> 
+<span class="line-number"> 51</span>   <span class="comment">/**</span>
+<span class="line-number"> 52</span> <span class="comment">   * </span><span class="comment">This</span> <span class="comment">constructs</span> <span class="comment">a</span> <span class="comment">proxy</span> <span class="comment">shape</span> <span class="comment">that</span> <span class="comment">lazily</span> <span class="comment">instantiates</span> <span class="comment">the</span> <span class="comment">shape</span> <span class="comment">class</span> <span class="comment">from</span>
+<span class="line-number"> 53</span> <span class="comment">   * </span><span class="comment">the</span> <span class="comment">associated</span> <span class="comment">extension</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number"> 54</span> <span class="comment">   * </span>
+<span class="line-number"> 55</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">context</span> <span class="comment">The</span> <span class="comment">bundle</span> <span class="comment">context</span> <span class="comment">to</span> <span class="comment">use</span> <span class="comment">for</span> <span class="comment">retrieving</span> <span class="comment">the</span> <span class="comment">extension</span>
+<span class="line-number"> 56</span> <span class="comment">   *          </span><span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number"> 57</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">bundleId</span> <span class="comment">The</span> <span class="comment">bundle</span> <span class="comment">ID</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">extension</span> <span class="comment">bundle</span><span class="comment">.</span>
+<span class="line-number"> 58</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">className</span> <span class="comment">The</span> <span class="comment">class</span> <span class="comment">name</span> <span class="comment">of</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span>
+<span class="line-number"> 59</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 60</span>   <span class="keyword-directive">public</span> DefaultShape(BundleContext context, <span class="keyword-directive">long</span> bundleId, String className) {
+<span class="line-number"> 61</span>     m_context = context;
+<span class="line-number"> 62</span>     m_bundleId = bundleId;
+<span class="line-number"> 63</span>     m_className = className;
+<span class="line-number"> 64</span>   }
+<span class="line-number"> 65</span> 
+<span class="line-number"> 66</span>   <span class="comment">/**</span>
+<span class="line-number"> 67</span> <span class="comment">   * </span><span class="comment">Implements</span> <span class="comment">the</span> <span class="ST0">&lt;tt&gt;</span><span class="comment">SimpleShape</span><span class="ST0">&lt;/tt&gt;</span> <span class="comment">interface</span> <span class="comment">method</span><span class="comment">.</span> <span class="comment">When</span> <span class="comment">acting</span> <span class="comment">as</span> <span class="comment">a</span>
+<span class="line-number"> 68</span> <span class="comment">   * </span><span class="comment">proxy</span><span class="comment">, </span><span class="comment">this</span> <span class="comment">method</span> <span class="comment">lazily</span> <span class="comment">loads</span> <span class="comment">and</span> <span class="comment">instantiates</span> <span class="comment">the</span> <span class="comment">shape</span> <span class="comment">class</span> <span class="comment">and</span> <span class="comment">then</span>
+<span class="line-number"> 69</span> <span class="comment">   * </span><span class="comment">uses</span> <span class="comment">it</span> <span class="comment">to</span> <span class="comment">draw</span> <span class="comment">the</span> <span class="comment">shape</span><span class="comment">.</span> <span class="comment">When</span> <span class="comment">acting</span> <span class="comment">as</span> <span class="comment">a</span> <span class="comment">placeholder</span> <span class="comment">shape</span><span class="comment">, </span><span class="comment">this</span> <span class="comment">method</span>
+<span class="line-number"> 70</span> <span class="comment">   * </span><span class="comment">draws</span> <span class="comment">the</span> <span class="comment">default</span> <span class="comment">icon</span><span class="comment">.</span>
+<span class="line-number"> 71</span> <span class="comment">   * </span>
+<span class="line-number"> 72</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">g2</span> <span class="comment">The</span> <span class="comment">graphics</span> <span class="comment">object</span> <span class="comment">used</span> <span class="comment">for</span> <span class="comment">painting</span><span class="comment">.</span>
+<span class="line-number"> 73</span> <span class="comment">   * </span><span class="ST0">@param</span> <span class="comment">p</span> <span class="comment">The</span> <span class="comment">position</span> <span class="comment">to</span> <span class="comment">paint</span> <span class="comment">the</span> <span class="comment">triangle</span><span class="comment">.</span>
+<span class="line-number"> 74</span> <span class="comment">   *</span><span class="comment">*/</span>
+<span class="line-number"> 75</span>   <span class="keyword-directive">public</span> <span class="keyword-directive">void</span> draw(Graphics2D g2, Point p) {
+<span class="line-number"> 76</span>     <span class="comment">// If this is a proxy shape, instantiate the shape class</span>
+<span class="line-number"> 77</span>     <span class="comment">// and use it to draw the shape.</span>
+<span class="line-number"> 78</span>     <span class="keyword-directive">if</span> (m_context != <span class="keyword-directive">null</span>) {
+<span class="line-number"> 79</span>       <span class="keyword-directive">try</span> {
+<span class="line-number"> 80</span>         <span class="keyword-directive">if</span> (m_shape == <span class="keyword-directive">null</span>) {
+<span class="line-number"> 81</span>           <span class="comment">// Get the bundle.</span>
+<span class="line-number"> 82</span>           Bundle bundle = m_context.getBundle(m_bundleId);
+<span class="line-number"> 83</span>           <span class="comment">// Load the class and instantiate it.</span>
+<span class="line-number"> 84</span>           Class clazz = bundle.loadClass(m_className);
+<span class="line-number"> 85</span>           m_shape = (SimpleShape) clazz.newInstance();
+<span class="line-number"> 86</span>         }
+<span class="line-number"> 87</span>         <span class="comment">// Draw the shape.</span>
+<span class="line-number"> 88</span>         m_shape.draw(g2, p);
+<span class="line-number"> 89</span>         <span class="comment">// If everything was successful, then simply return.</span>
+<span class="line-number"> 90</span>         <span class="keyword-directive">return</span>;
+<span class="line-number"> 91</span>       } <span class="keyword-directive">catch</span> (Exception ex) {
+<span class="line-number"> 92</span>         <span class="comment">// This generally should not happen, but if it does then</span>
+<span class="line-number"> 93</span>         <span class="comment">// we can just fall through and paint the default icon.</span>
+<span class="line-number"> 94</span>       }
+<span class="line-number"> 95</span>     }
+<span class="line-number"> 96</span> 
+<span class="line-number"> 97</span>     <span class="comment">// If the proxied shape could not be drawn for any reason or if</span>
+<span class="line-number"> 98</span>     <span class="comment">// this shape is simply a placeholder, then draw the default icon.</span>
+<span class="line-number"> 99</span>     <span class="keyword-directive">if</span> (m_icon == <span class="keyword-directive">null</span>) {
+<span class="line-number">100</span>       <span class="keyword-directive">try</span> {
+<span class="line-number">101</span>         m_icon = <span class="keyword-directive">new</span> ImageIcon(<span class="keyword-directive">this</span>.getClass().getResource(<span class="character">&quot;</span><span class="character">underc.png</span><span class="character">&quot;</span>));
+<span class="line-number">102</span>       } <span class="keyword-directive">catch</span> (Exception ex) {
+<span class="line-number">103</span>         ex.printStackTrace();
+<span class="line-number">104</span>         g2.setColor(Color.red);
+<span class="line-number">105</span>         g2.fillRect(0, 0, 60, 60);
+<span class="line-number">106</span>         <span class="keyword-directive">return</span>;
+<span class="line-number">107</span>       }
+<span class="line-number">108</span>     }
+<span class="line-number">109</span>     g2.drawImage(m_icon.getImage(), 0, 0, <span class="keyword-directive">null</span>);
+<span class="line-number">110</span>   }
+<span class="line-number">111</span> }
+<span class="line-number">112</span> 
+<span class="line-number">113</span> 
+</pre></body>
+</html>
