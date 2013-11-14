@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "Packing ..."
+zip -r osgi-exercises-part2.zip \
+exercises/exc5/ \
+exercises/exc6/
+echo "Completed"

@@ -1,0 +1,9 @@
+#!/bin/sh
+echo "Packing ..."
+zip -r osgi-exercises-part1.zip \
+exercises/exc2/ \
+exercises/exc3/Activator.java exercises/exc3/manifest.mf \
+exercises/exc4a/Activator.java exercises/exc4a/DictionaryService.java \
+exercises/exc4a/manifest.mf \
+exercises/exc4b/Activator.java exercises/exc4b/manifest.mf
+echo "Completed"
